@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Fight Log — Niraj</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #0c0c0c;
+    color: #f5f5f5;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.section {
+    margin-top: 40px;
+}
+
+.card {
+    background: #1a1a1a;
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+}
+
+.date {
+    font-size: 12px;
+    color: #aaa;
+}
+
+.type {
+    font-size: 13px;
+    color: #f9ae00;
+}
+
+pre {
+    white-space: pre-wrap;
+    font-family: inherit;
+}
+
+details {
+    background: #1a1a1a;
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+summary {
+    font-weight: bold;
+    color: #f9ae00;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>Muay Thai Fight Log</h1>
+<p>Read-only public training log</p>
+
+<div id="sessions" class="section"></div>
+<div id="diary" class="section"></div>
+<div id="analysis" class="section"></div>
+<div id="debriefs" class="section"></div>
+
+</div>
+
+<script id="data" type="application/json">
+REPLACE_JSON_HERE
+</script>
+
+<script>
+const data = JSON.parse(document.getElementById("data").textContent);
+
+// Sessions
+const sDiv = document.getElementById("sessions");
+sDiv.innerHTML = "<h2>Sessions</h2>";
+
+data.sessions.reverse().forEach(s => {
+    sDiv.innerHTML += `
+    <div class="card">
+        <div class="date">${s.date}</div>
+        <div class="type">${s.type}</div>
+        <p>${s.notes}</p>
+        <p><b>Feel:</b> ${s.feel || ""}</p>
+    </div>`;
+});
+
+// Diary
+const dDiv = document.getElementById("diary");
+dDiv.innerHTML = "<h2>Diary</h2>";
+
+data.diary.reverse().forEach(d => {
+    dDiv.innerHTML += `
+    <details>
+        <summary>${d.date}</summary>
+        <pre>${d.text}</pre>
+    </details>`;
+});
+
+// Analysis
+const aDiv = document.getElementById("analysis");
+aDiv.innerHTML = "<h2>Video Analysis</h2>";
+
+data.analyses.reverse().forEach(a => {
+    aDiv.innerHTML += `
+    <details>
+        <summary>${a.date} — ${a.sessionType}</summary>
+        <pre>${a.feedback}</pre>
+    </details>`;
+});
+
+// Debriefs
+const dbDiv = document.getElementById("debriefs");
+dbDiv.innerHTML = "<h2>Weekly Debriefs</h2>";
+
+data.debriefs.reverse().forEach(d => {
+    dbDiv.innerHTML += `
+    <details>
+        <summary>${d.weekEnd}</summary>
+        <pre>${d.text}</pre>
+    </details>`;
+});
+</script>
+
+</body>
+</html>
